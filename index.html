@@ -147,15 +147,15 @@
   </div>
 
   <div id="puzz" ondrop="drop(event)" ondragover="allowDrop(event)">
-    <i class="first" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="secon" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="third" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="fourt" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="fifth" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="sixth" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="seven" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="eight" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
-    <i class="ninth" ondrop="drop(event)" ondragover="allowDrop(event)"></i>
+    <i class="first"></i>
+    <i class="secon"></i>
+    <i class="third"></i>
+    <i class="fourt"></i>
+    <i class="fifth"></i>
+    <i class="sixth"></i>
+    <i class="seven"></i>
+    <i class="eight"></i>
+    <i class="ninth"></i>
   </div>
 
   <div id="clicks">0</div>
@@ -196,46 +196,6 @@
       allDoneElement.classList.toggle('allDone');
     }
 
-    var puzzleItemsMobile = document.querySelectorAll('#puzz i');
-    puzzleItemsMobile.forEach(function (element) {
-      element.addEventListener('mousedown', function () {
-        totalClicks++;
-        document.querySelector('#clicks').innerHTML = totalClicks;
-      });
-      element.addEventListener('click', function () {
-        if (document.querySelector('.clicked')) {
-          document.querySelector('.clicked').classList.toggle('clicked');
-          element.classList.toggle('clicked');
-        } else {
-          element.classList.toggle('clicked');
-        }
-      });
-    });
-
-    var puzzleItemsDesktop = document.querySelectorAll('#puz i');
-    puzzleItemsDesktop.forEach(function (element) {
-      element.addEventListener('click', function () {
-        if (document.querySelector('.clicked')) {
-          var clickedElement = document.querySelector('.clicked');
-          if (clickedElement.classList.contains(element.classList)) {
-            element.classList.add('dropped');
-            clickedElement.classList.add('done');
-            clickedElement.classList.toggle('clicked');
-
-            if (document.querySelectorAll('.dropped').length == 9) {
-              document.querySelector('#puz').classList.add('allDone');
-              document.querySelector('#puz').style.border = 'none';
-              document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-              setTimeout(function () {
-                window.location.href = "https://example.com"; // Replace with your desired URL
-              }, 1500);
-            }
-          }
-        }
-      });
-    });
-
     function allowDrop(ev) {
       ev.preventDefault();
     }
@@ -248,7 +208,7 @@
       ev.preventDefault();
       var data = ev.dataTransfer.getData("text");
 
-      if (ev.target.classList.contains(data)) {
+      if (ev.target.className.includes(data)) {
         ev.target.classList.add('dropped');
         document.querySelector('.' + data + "[draggable='true']").classList.add('done');
 
@@ -263,6 +223,41 @@
         }
       }
     }
+
+    var puzzleItemsMobile = document.querySelectorAll('#puzz i');
+    puzzleItemsMobile.forEach(function (element) {
+      element.addEventListener('mousedown', function () {
+        totalClicks++;
+        document.querySelector('#clicks').innerHTML = totalClicks;
+      });
+    });
+
+    var puzzleItemsDesktop = document.querySelectorAll('#puz i');
+    puzzleItemsDesktop.forEach(function (element) {
+      element.addEventListener('click', function () {
+        if (document.querySelector('.clicked')) {
+          var clickedElement = document.querySelector('.clicked');
+          if (clickedElement.classList.contains(element.className)) {
+            element.classList.add('dropped');
+            clickedElement.classList.add('done');
+            clickedElement.classList.remove('clicked');
+
+            if (document.querySelectorAll('.dropped').length == 9) {
+              document.querySelector('#puz').classList.add('allDone');
+              document.querySelector('#puz').style.border = 'none';
+              document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
+
+              setTimeout(function () {
+                window.location.href = "https://example.com"; // Replace with your desired URL
+              }, 1500);
+            }
+          }
+        } else {
+          element.classList.add('clicked');
+        }
+      });
+    });
+
   </script>
 </body>
 </html>
